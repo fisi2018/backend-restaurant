@@ -1,0 +1,39 @@
+const mongoose=require("mongoose");
+const userSchema=new mongoose.Schema({
+    name:{
+        type:String,
+        trim:true,
+        required:true,
+        maxlength:32
+    },
+    points:{
+        type:Number,
+        default:500,
+        required:true
+    },
+    email:{
+        type:String,
+        trim:true,
+        required:true,
+        maxlength:32
+    },
+    password:{
+        type:String,
+        trim:true,
+        required:true
+    },
+    img:{
+        data:Buffer,
+        contentType:String
+    },
+    role:{
+        type:String,
+        trim:true,
+        required:true,
+        default:"user"
+    }
+},{
+    timestamps:true,
+    versionKey:false
+});
+module.exports=mongoose.model("UserModel",userSchema);

@@ -8,5 +8,7 @@ app.use( express.json() );
 app.use(cors());
 
 //routes
+app.use("/api/user",require("./apiServices/user/route"));
+app.use("/api/entrada",require("./apiServices/entrada/route"));
 
 module.exports=app;
