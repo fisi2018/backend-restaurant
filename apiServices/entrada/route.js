@@ -2,7 +2,7 @@ const express=require("express");
 const { cacheInit } = require("../../middlewares/cache");
 const router=express.Router();
 const {list,create,remove,update,entradaById,imgEntrada} =require("./controller");
-router.get("/entradas",cacheInit,list);
+router.get("/entradas",list);
 router.post("/createEntrada",create);
 router.put("/update/:entradaId",update);
 router.delete("/:entradaId",remove);

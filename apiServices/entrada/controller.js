@@ -34,16 +34,12 @@ exports.update=async(req,res)=>{
          res.send(response);
         
     }catch(err){
-        console.log(err);
         httpError(res,err);
     }
 }
 exports.entradaById=async(req,res,next,id)=>{
     try{
-        const response=await elementById(EntradaModel,id);
-        if(response.message){
-            res.status(400).send(response);
-        }
+        const response=await elementById(EntradaModel,id,res);
         req.entrada=response;
         next();
     }catch(err){

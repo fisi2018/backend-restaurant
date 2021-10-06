@@ -12,10 +12,10 @@ const listElements=async(Model,req)=>{
     }
 }
 
-const elementById=async(Model,id)=>{
+const elementById=async(Model,id,res)=>{
     try{
         const entrada= await elementByIdDB(Model,id);
-        if(!entrada) return{message:"No existe una entrada con ese ID"};
+        if(!entrada) return res.status(400).send({message:"No eexiste un elemento con ese ID"});
         return {entradaFull:entrada}
     }catch(err){
         console.log("ERROR EN LA CAPA DE SERVICIOS ",err)

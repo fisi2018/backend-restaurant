@@ -1,0 +1,29 @@
+const mongoose=require("mongoose");
+const postreSchema=new mongoose.Schema({
+    name:{
+        type:String,
+        trim:true,
+        required:true,
+        maxlength:32
+    },
+    description:{
+        type:String,
+        trim:true
+    },
+    price:{
+        type:Number,
+        required:true
+    },
+    points:{
+        type:Number,
+        required:true
+    },
+    img:{
+        data:Buffer,
+        contentType:String
+    }
+},{
+    timestamps:true,
+    versionKey:false
+});
+module.exports=mongoose.model("PostreModel",postreSchema);

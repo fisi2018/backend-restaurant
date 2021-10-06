@@ -61,4 +61,13 @@ const updateElementDB=async(Model,id,fields,files)=>{
         console.log("ERROR EN LA CAPA DE DATOS ",err);
     }
 }
-module.exports={updateElementDB,createElementDB,listDB,elementByIdDB,removeElementDB}
+const findOneDB=async(Model,email)=>{
+    try{
+        console.log(email);
+        const user=await Model.findOne({email});
+        return user;
+    }catch(err){
+        console.log("Error en la capa de datos ",err)
+    }
+}
+module.exports={findOneDB,updateElementDB,createElementDB,listDB,elementByIdDB,removeElementDB}

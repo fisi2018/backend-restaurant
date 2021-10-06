@@ -1,0 +1,46 @@
+const mongoose=require("mongoose");
+const {ObjectId}=mongoose.Schema;
+const ordenSchema=new mongoose.Schema({
+    entrada:{
+        type:ObjectId,
+        ref:"EntradaModel"
+    },
+    plato:{
+        type:ObjectId,
+        ref:"PlatoModel"
+    },
+    bebida:{
+        type:ObjectId,
+        ref:"BebidaModel"
+    },
+    postre:{
+        type:ObjectId,
+        ref:"PostreModel"
+    },
+    user:{
+        type:ObjectId,
+        ref:"UserModel"
+    },
+    price:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    points:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    isExchange:{
+        type:Boolean,
+        default:false,
+        required:true
+    },
+    pricePoints:{
+        type:Number
+    }
+},{
+    timestamps:true,
+    versionKey:false
+});
+module.exports=mongoose.model("OrdenModel",ordenSchema);

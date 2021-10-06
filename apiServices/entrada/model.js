@@ -14,12 +14,15 @@ const entradaSchema=new mongoose.Schema(
         },
         price:{
             type:Number,
-            trim:true,
             required:true
         },
         img:{
             data:Buffer,
             contentType:String
+        },
+        points:{
+            type:Number,
+            required:true
         }
     },
     {

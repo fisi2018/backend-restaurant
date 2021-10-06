@@ -1,7 +1,8 @@
 const { httpError } = require("../../helpers/handleError");
-const { listElements } = require("../../services/services");
+const { listElements, elementById, removeElement, updateElement, elementImg } = require("../../services/services");
 const registerService = require("../../services/registerService");
 const UserModel=require("./model");
+const loginService = require("../../services/loginService");
 
 exports.list=async(req,res)=>{
     try{
@@ -19,15 +20,47 @@ exports.register=async(req,res)=>{
         httpError(res,err);
     }
 }
-exports.login=()=>{
-
+exports.login=async(req,res)=>{
+    try{
+        
+        const response=await loginService(UserModel,req,res);
+        res.send(response);
+    }catch(err){
+        httpError(res,err);
+    }
 }
-exports.update=()=>{
-
+exports.update=async(req,res)=>{
+    try {
+        const id=req.user.entradaFull._id;
+        const response=await updateElement(UserModel,id,req);
+        res.send(response);
+    } catch (err) {
+        httpError(res,err);
+    }
 }
-exports.userById=()=>{
-
+exports.userById=async(req,res,next,id)=>{
+    try{
+        const response=await elementById(UserModel,id,res);
+        req.user=response;
+        next();
+    }catch(err){
+        httpError(res,err);
+    }
 }
-exports.remove=()=>{
-
+exports.remove=async(req,res)=>{
+    try {
+        const data=req.user.entradaFull;
+        const response=await removeElement(data);
+        res.send(response);
+    } catch (err) {
+        httpError(res,err);
+    }
+}
+exports.img=(req,res,next)=>{
+    const arg=req.user.entradaFull;
+    elementImg(arg,(type,data)=>{
+        res.set("Content-Type",type);
+        return res.send(data);
+    });
+    next()
 }
