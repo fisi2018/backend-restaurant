@@ -4,11 +4,22 @@ const tokenSign=async(user)=>{
         _id:user._id,
         name:user.name,
         role:user.role,
-        points:user.points
+        email:user.email,
+        points:user.points,
+        img:user.img?true:false
     },
     process.env.JWT_SECRET,
     {
         expiresIn:"2h"
+    })
+}
+const tokenCodeSign=async(data)=>{
+    return jwt.sign({
+        code:data.code,
+        email:data.email
+    },process.env.JWT_SECRET,
+    {
+        expiresIn:"3min"
     })
 }
 const verifyToken=async(token)=>{
@@ -22,4 +33,4 @@ const decodeSign=()=>{
 
 }
 
-module.exports={tokenSign,verifyToken,decodeSign}
+module.exports={tokenSign,verifyToken,decodeSign,tokenCodeSign}

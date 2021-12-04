@@ -8,6 +8,30 @@ const listOrderDB=async(order,sortBy)=>{
         console.log("Error en la capa de datos ",err);
     }
 }
+const listPromoDB=async()=>{
+    try{
+        const response=await OrdenModel.find({isExchange:true}).populate("entrada","name").populate("plato","name").populate("bebida","name").populate("postre","name");
+        return response;
+    }catch(err){
+        console.log("Ha ocurrido un error en la capa de datos");
+        return{
+            message:"Ha ocurrido un error en la capa de datos",
+            error:err
+        }
+    }
+}
+const listOrderByUserDB=async(order,sortBy,userId)=>{
+    try{
+        const response=await OrdenModel.find({user:userId}).populate("user","name points").populate("entrada","name price points").populate("plato","name price points").populate("bebida","name price points").populate("postre","name price points").sort([[sortBy,order]]);
+        return response;
+    }catch(err){
+        console.log("error en la capa de datos ",err);
+        return{
+            message:"Ha ocurrido un error en la capa de datos",
+            error:err
+        }
+    }
+}
 const createOrderDB=async(fields)=>{
     try {
         let newFields={};
@@ -21,7 +45,10 @@ const createOrderDB=async(fields)=>{
         const result=await save();
         return result
     } catch (err) {
-        console.log("Error en la capa de datos ",err);
+        return{
+            message:"Ha ocurrido un error en la capa de datos",
+            error:err
+        }
     }
 }
 const showOrderDB=async(id)=>{
@@ -58,4 +85,4 @@ const removeOrderDB=async(data)=>{
         console.log("Error en la capa de datos ",err);
     }
 }
-module.exports={removeOrderDB,listOrderDB,createOrderDB,showOrderDB,updateOrderDB,orderByIdDB}
+module.exports={removeOrderDB,listOrderByUserDB,listOrderDB,createOrderDB,showOrderDB,updateOrderDB,orderByIdDB,listPromoDB}

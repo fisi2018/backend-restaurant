@@ -4,14 +4,19 @@ const {compare}=require("../helpers/handleBcrypt");
 
 const loginService=async(Model,req,res)=>{
     try{
-        const {email,password}=req.body
+        const {email,password}= req.body;
         const response= await findOneDB(Model,email);
         if(!response) res.status(404).send({message:"Usuario no encontrado"});
         const checkPassword=await compare(password,response.password);
         if(checkPassword){
-            const tokenSesion=await tokenSign(response);
+            const data={name:response.name,
+                    _id:response._id,
+                    email:response.email,
+                    points:response.points,
+                    role:response.role};
+            const tokenSesion=await tokenSign(data);
             return{
-                data:response,
+                data,
                 tokenSesion
             }
         }else{

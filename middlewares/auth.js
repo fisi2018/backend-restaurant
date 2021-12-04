@@ -6,10 +6,12 @@ const checkAuth=async(req,res,next)=>{
         const tokenData= await verifyToken(token);
         tokenData._id?
         next()
-        :res.status(409).send({message:"No tiene acceso a esta información"});
+        :res.status(409).send({message:"No tiene acceso a esta información",
+    error:true});
     }catch(err){
         res.status(409).send({
-            message:"No tiene acceso a esta información"
+            message:"No tiene acceso a esta información",
+            error:true
         })
     }
 }

@@ -1,7 +1,8 @@
 const { httpError } = require("../../helpers/handleError");
-const { listElements, elementById, removeElement, updateElement, elementImg } = require("../../services/services");
-const registerService = require("../../services/registerService");
+const { listElements, elementById, removeElement, updateElement, elementImg, generateCode, clearCodes } = require("../../services/services");
+const {registerService} = require("../../services/registerService");
 const UserModel=require("./model");
+const CodeModel=require("../code/model");
 const loginService = require("../../services/loginService");
 
 exports.list=async(req,res)=>{
@@ -63,4 +64,18 @@ exports.img=(req,res,next)=>{
         return res.send(data);
     });
     next()
+}
+exports.generateCode=async(req,res)=>{
+    try {
+        const data=req.body;
+        const result=await clearCodes();
+        if(result.error)return res.send({
+            message:result.message,
+            error:result.error
+        })
+        const response=await generateCode(CodeModel,data);
+        res.send(response);
+    } catch (err) {
+        httpError(res,err);
+    }
 }

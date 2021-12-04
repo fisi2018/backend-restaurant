@@ -21,6 +21,14 @@ const ordenSchema=new mongoose.Schema({
         type:ObjectId,
         ref:"UserModel"
     },
+    address:{
+        type:String,
+        required:true
+    },
+    phone:{
+        type:String,
+        default:"not phone"
+    },
     price:{
         type:Number,
         required:true,

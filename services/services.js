@@ -1,6 +1,9 @@
 const formidable=require("formidable");
 const util=require("util");
-const {updateElementDB, listDB,createElementDB,elementByIdDB,removeElementDB} = require("../DAO/dao");
+const transporter = require("../config/mailer");
+const {updateElementDB, listDB,createElementDB,elementByIdDB,removeElementDB, saveCodeDB, deleteCodeDB, clearCodesDB} = require("../DAO/dao");
+const {tokenCodeSign } = require("../helpers/generateToken");
+const { generateCodeNumber } = require("../utils");
 const listElements=async(Model,req)=>{
     try{
         let order=req.query.order?req.query.order:"asc",
@@ -61,4 +64,49 @@ const updateElement=async(Model,id,req)=>{
         console.log("ERROR EN LA CAPA DE SERVICIOS ",err);
     }
 }
-module.exports={updateElement,removeElement,elementById,elementImg,createElement,listElements}
+const generateCode=async(Model,data)=>{
+    try{
+        const codeEmail=generateCodeNumber(6);
+        const token=await tokenCodeSign({
+            code:codeEmail,
+            email:data.email
+        });
+        const result=await saveCodeDB(Model,{code:codeEmail,email:data.email,token});
+        let info = await transporter.sendMail({
+        from: '"Envío de código" <mensajerop7@gmail.com>', // sender address
+        to: data.email, // list of receivers
+        subject: "Código de verificación", // Subject line
+        html: `<b>Código de verificación solicitado para el registro</b>
+        <br/> 
+        <p>El código expirará en 3 minutos</p>
+         <br/>
+         <h1>${codeEmail}</h1>`, 
+        });
+        
+        return{
+            result,
+            token
+        }
+    }catch(err){
+        console.log("Error en la capa de servicio ",err);
+    }
+}
+const deleteCode=async(Model,data)=>{
+    try{
+        await deleteCodeDB(Model,data);
+    }catch(err){
+        console.log("Error en la capa de servicios ",err);
+    }
+}
+const clearCodes=async()=>{
+    try{
+        const response=await clearCodesDB();
+        return response;
+    }catch(err){
+        return{
+            message:"Ha ocurrido un error en la capa de servicios",
+            error:err
+        }
+    }
+}
+module.exports={clearCodes,deleteCode,generateCode,updateElement,removeElement,elementById,elementImg,createElement,listElements}

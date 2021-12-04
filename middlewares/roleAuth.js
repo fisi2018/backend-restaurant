@@ -7,11 +7,13 @@ const checkRoleAuth=(roles)=>async(req,res,next)=>{
         const user=await UserModel.findById(tokenData._id);
         [].concat(roles).includes(user.role)?next():
         res.status(409).send({
-            message:"No tiene permisos para realizar esta acción"
+            message:"No tiene permisos para realizar esta acción",
+            error:true
         })
     }catch(err){
         res.status(409).send({
-            message:"No tiene permisos para realizar esta acción"
+            message:"No tiene permisos para realizar esta acción",
+            error:true
         })
     }
 }
